@@ -126,9 +126,10 @@ pipeline {
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     script {
-                        timeout(time: 0.5, unit: 'DAYS') {
+                        timeout(time: 720, unit: 'MINUTES') { // Equivalent to 0.5 days
                             input id: 'ApproveDeployment', message: 'Are you happy to proceed with the deployment?', ok: 'Approve'
                         }
+
 
                         withCredentials([usernamePassword(credentialsId: ARM_SVP, usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                             pwsh """
