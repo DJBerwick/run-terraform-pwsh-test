@@ -1,0 +1,37 @@
+stages:
+  - run-script
+
+run-script:
+  stage: run-script
+  image: mcr.microsoft.com/powershell
+  variables:
+    WORKING_DIRECTORY: (Get-Location).Path
+    RUN_TERRAFORM_INIT: "true"
+    RUN_TERRAFORM_PLAN: "true"
+    RUN_TERRAFORM_PLAN_DESTROY: "false"
+    RUN_TERRAFORM_APPLY: "false"
+    RUN_TERRAFORM_DESTROY: "false"
+    ENABLE_DEBUG_MODE: "true"
+    DELETE_PLAN_FILES: "true"
+    TERRAFORM_VERSION: "latest"
+    TERRAFORM_STATE_NAME: "cscot-dev.terraform.tfstate"
+  script:
+    - >
+      pwsh -Command ".\Run-Terraform.ps1
+      -WorkingDirectory '${WORKING_DIRECTORY}'
+      -RunTerraformInit '${RUN_TERRAFORM_INIT}'
+      -RunTerraformPlan '${RUN_TERRAFORM_PLAN}'
+      -RunTerraformPlanDestroy '${RUN_TERRAFORM_PLAN_DESTROY}'
+      -RunTerraformApply '${RUN_TERRAFORM_APPLY}'
+      -RunTerraformDestroy '${RUN_TERRAFORM_DESTROY}'
+      -DebugMode '${ENABLE_DEBUG_MODE}'
+      -DeletePlanFiles '${DELETE_PLAN_FILES}'
+      -TerraformVersion '${TERRAFORM_VERSION}'
+      -BackendStorageSubscriptionId '${SpokeSubId}'
+      -BackendStorageResourceGroupName '${SpokeSaRgName}'
+      -BackendStorageAccountName '${SpokeSaName}'
+      -BackendStorageAccountBlobContainerName '${SpokeSaBlobContainerName}'
+      -TerraformStateName '${TERRAFORM_STATE_NAME}'"
+  only:
+    - triggers
+    - web
