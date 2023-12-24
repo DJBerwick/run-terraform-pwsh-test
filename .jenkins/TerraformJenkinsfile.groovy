@@ -7,7 +7,7 @@ pipeline {
 
     parameters {
         string(name: 'LzName', defaultValue: 'bakery', description: 'The name of the Landing Zones target')
-        choice( name: 'StackName', choices: ['subscription', 'network', 'keyvault'], description: 'Stack to run')
+        choice(name: 'StackName', choices: ['subscription', 'network', 'keyvault'], description: 'Stack to run')
         booleanParam(name: 'TfInit', defaultValue: true, description: 'Terraform Init')
         booleanParam(name: 'TfPlan', defaultValue: true, description: 'Terraform Plan')
         booleanParam(name: 'TfApply', defaultValue: false, description: 'Terraform Apply')
@@ -31,7 +31,9 @@ pipeline {
     stages {
         stage('Init') {
             when {
-                expression { TfInit }
+                allOf {
+                    expression { params.TfInit }
+                }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -57,7 +59,10 @@ pipeline {
 
         stage('Plan') {
             when {
-                expression { TfPlan && TfInit }
+                allOf {
+                    expression { params.TfPlan }
+                    expression { params.TfInit }
+                }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -83,7 +88,10 @@ pipeline {
 
         stage('Plan Destroy') {
             when {
-                expression { TfPlanDestroy && TfInit }
+                allOf {
+                    expression { params.TfPlanDestroy }
+                    expression { params.TfInit }
+                }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -109,7 +117,11 @@ pipeline {
 
         stage('Apply') {
             when {
-                expression { TfApply && TfPlan && TfInit }
+                allOf {
+                    expression { params.TfApply }
+                    expression { params.TfPlan }
+                    expression { params.TfInit }
+                }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -139,7 +151,11 @@ pipeline {
 
         stage('Apply Destroy') {
             when {
-                expression { TfDestroy && TfPlanDestroy && TfInit }
+                allOf {
+                    expression { params.TfDestroy }
+                    expression { params.TfPlanDestroy }
+                    expression { params.TfInit }
+                }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
