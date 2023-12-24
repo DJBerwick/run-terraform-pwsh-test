@@ -499,11 +499,24 @@ try
         if ($InvokeTerraformInitSuccessful -and $ConvertedRunTerraformApply -and $InvokeTerraformPlanSuccessful)
         {
             Invoke-TerraformApply
+            $InvokeTerraformApplySuccessful = ($LASTEXITCODE -eq 0)
+            if (-not$InvokeTerraformApplySuccessful)
+            {
+                throw "[$( $MyInvocation.MyCommand.Name )] Error: An error occured during terraform apply command"
+                exit 1
+            }
         }
 
         if ($ConvertedRunTerraformDestroy -and $InvokeTerraformPlanDestroySuccessful)
         {
             Invoke-TerraformDestroy
+            $InvokeTerraformDestroySuccessful = ($LASTEXITCODE -eq 0)
+
+            if (-not$InvokeTerraformDestroySuccessful)
+            {
+                throw "[$( $MyInvocation.MyCommand.Name )] Error: An error occured during terraform destroy command"
+                exit 1
+            }
         }
     }
     catch
