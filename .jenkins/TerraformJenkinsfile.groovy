@@ -36,7 +36,7 @@ pipeline {
                 }
             }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     script {
                         withCredentials([usernamePassword(credentialsId: ARM_SVP, usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                             pwsh """
@@ -65,7 +65,7 @@ pipeline {
                 }
             }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     script {
                         withCredentials([usernamePassword(credentialsId: ARM_SVP, usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                             pwsh """
@@ -94,7 +94,7 @@ pipeline {
                 }
             }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     script {
                         withCredentials([usernamePassword(credentialsId: ARM_SVP, usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                             pwsh """
@@ -124,7 +124,7 @@ pipeline {
                 }
             }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     script {
                         timeout(time: 0.5, unit: 'DAYS') {
                             input id: 'ApproveDeployment', message: 'Are you happy to proceed with the deployment?', ok: 'Approve'
@@ -158,7 +158,7 @@ pipeline {
                 }
             }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     script {
                         timeout(time: 0.5, unit: 'DAYS') {
                             input id: 'ApproveDeployment', message: 'Are you happy to proceed with the deployment?', ok: 'Approve'
